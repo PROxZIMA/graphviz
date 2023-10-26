@@ -1,0 +1,84 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/graphviz.svg.css">
+</head>
+
+<style>
+  #file {
+    font-size: .8rem;
+    line-height: .8rem;
+    padding-top: .3rem;
+    position: absolute;
+    width: 200px;
+    z-index: 100;
+    top: 5px;
+    left: 5px;
+  }
+
+  .tooltip-inner {
+    text-wrap: balance;
+  }
+
+  #graph {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+</style>
+
+<body>
+  <input type="file" id="file" accept=".svg" class="form-control" data-toggle="tooltip" data-placement="top"
+    title="Click node to highlight; Ctrl-scroll to zoom; Esc to unhighlight;">
+  <div id="graph"></div>
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdn.rawgit.com/jquery/jquery-mousewheel/master/jquery.mousewheel.min.js"></script>
+  <script type="text/javascript" src="https://cdn.rawgit.com/jquery/jquery-color/master/jquery.color.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="js/jquery.graphviz.svg.js"></script>
+  <script type="text/javascript">
+    $(document).ready(async function () {
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+
+      $('#file').change(function () {
+        fr = new FileReader();
+        fr.onload = function () {
+          $("#graph").graphviz({
+            svg: fr.result,
+            // tooltips: {
+            //   init: function ($graph) { },
+            //   show: function () { },
+            //   hide: function () { },
+            //   update: function () { }
+            // },
+            ready: function () {
+              var gv = this
+              gv.nodes().click(function () {
+                var $set = $()
+                $set.push(this)
+                $set = $set.add(gv.linkedFrom(this, true))
+                $set = $set.add(gv.linkedTo(this, true))
+                gv.highlight($set, true)
+                gv.bringToFront($set)
+              })
+              $(document).keydown(function (evt) {
+                if (evt.keyCode == 27) {
+                  gv.highlight()
+                }
+              })
+            }
+          });
+        };
+        fr.readAsText($('#file').prop('files')[0]);
+      });
+    });
+  </script>
+</body>
+
+</html>

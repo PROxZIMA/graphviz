@@ -7,8 +7,9 @@ jQuery plugin to make Graphviz SVG output more interactive and easier to navigat
 * Graph navigation - select linked nodes
 * Fancy UI tooltips; bootstrap supported out the box
 * Move things forward/back in the graph
+* Upload file and preview
 
-Have a look at the demo: https://cdn.rawgit.com/mountainstorm/jquery.graphviz.svg/master/demo.html
+Have a look at the demo: https://proxzima.dev/graphviz
 
 
 Documentation
